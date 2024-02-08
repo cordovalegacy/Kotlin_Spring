@@ -1,0 +1,12 @@
+To manipulate the environment:
+    1. Go to application file (where your fun main(){} method lives)
+    2. Right click on the play icon in the scroll section of the file
+    3. Modify run configuration
+    4. Click modify options
+    5. Click Add VM
+    6. Paste your environment in Add VM:
+        <    -Dspring.profiles.active=production    >
+
+To leave a startup message for your active environment:
+    1. Create a file in /resources
+    2. The file name should be application-[environment_name].yml
