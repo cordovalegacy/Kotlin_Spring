@@ -21,8 +21,16 @@ class LanguageService(val languageRepository: LanguageRepository) {
 
         logger.info { "Saved Language is: $languageEntity" }
 
+        //let gives us lambdas (scope function)
         return languageEntity.let {
             LanguageDTO(it.id, it.name, it.discipline, it.difficulty)
         }
+    }
+
+    fun getLanguages(): List<LanguageDTO> {
+        return languageRepository.findAll()
+                .map {
+                    LanguageDTO(it.id, it.name, it.discipline, it.difficulty);
+                }
     }
 }
