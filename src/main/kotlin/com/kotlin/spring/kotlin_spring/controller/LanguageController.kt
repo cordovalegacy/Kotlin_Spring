@@ -4,7 +4,9 @@ import com.kotlin.spring.kotlin_spring.dto.LanguageDTO
 import com.kotlin.spring.kotlin_spring.service.LanguageService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -26,5 +28,11 @@ class LanguageController(val languageService: LanguageService) {
     @ResponseStatus(HttpStatus.OK)
     fun getLanguages(): List<LanguageDTO>{
         return languageService.getLanguages();
+    }
+
+    @PutMapping("/{languageId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun updateLanguage(@RequestBody languageDTO: LanguageDTO, @PathVariable languageId : Int){
+        languageService.updateLanguage(languageId, languageDTO)
     }
 }

@@ -2,6 +2,7 @@ package com.kotlin.spring.kotlin_spring.service
 
 import com.kotlin.spring.kotlin_spring.dto.LanguageDTO
 import com.kotlin.spring.kotlin_spring.entity.Language
+import com.kotlin.spring.kotlin_spring.exception.LanguageNotFoundException
 import com.kotlin.spring.kotlin_spring.repository.LanguageRepository
 import mu.KLogging
 import org.springframework.stereotype.Service
@@ -32,5 +33,21 @@ class LanguageService(val languageRepository: LanguageRepository) {
                 .map {
                     LanguageDTO(it.id, it.name, it.discipline, it.difficulty);
                 }
+    }
+
+    fun updateLanguage(languageId: Int, languageDTO: LanguageDTO): LanguageDTO {
+        val languageToUpdate = languageRepository.findById(languageId)
+        return if (languageToUpdate.isPresent){
+            languageToUpdate.get()
+                    .let {
+                        it.name = languageDTO.name
+                        it.difficulty = languageDTO.difficulty
+                        it.discipline = languageDTO.discipline
+                        languageRepository.save(it)
+                        LanguageDTO(it.id, it.name, it.discipline, it.difficulty)
+                    }
+        } else {
+            throw LanguageNotFoundException("Language $languageId does not exist")
+        }
     }
 }

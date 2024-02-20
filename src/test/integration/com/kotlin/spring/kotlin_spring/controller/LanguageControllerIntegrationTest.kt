@@ -1,6 +1,7 @@
 package com.kotlin.spring.kotlin_spring.controller
 
 import com.kotlin.spring.kotlin_spring.dto.LanguageDTO
+import com.kotlin.spring.kotlin_spring.entity.Language
 import com.kotlin.spring.kotlin_spring.repository.LanguageRepository
 import com.kotlin.spring.kotlin_spring.utils.mockLanguageList
 import org.junit.jupiter.api.Assertions
@@ -67,5 +68,25 @@ class LanguageControllerIntegrationTest {
                 .responseBody
 
         Assertions.assertEquals(5, languageDTOs!!.size)
+    }
+
+    @Test
+    fun updateLanguage(){
+        val testLanguage = Language(null, "Python", "backend", 2)
+        languageRepository.save(testLanguage)
+
+        val updateLanguageRequestBody = LanguageDTO(null, "TypeScript", "frontend/backend", 1)
+
+        val updatedLanguageDTO = webTestClient
+                .put()
+                .uri("/v1/languages/{languageId}", testLanguage.id)
+                .bodyValue(updateLanguageRequestBody)
+                .exchange()
+                .expectStatus().isCreated
+                .expectBody(LanguageDTO::class.java)
+                .returnResult()
+                .responseBody
+
+        Assertions.assertEquals(updateLanguageRequestBody.name, updatedLanguageDTO!!.name)
     }
 }

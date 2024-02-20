@@ -5,10 +5,10 @@ import jakarta.persistence.*
 @Entity
 @Table(name="Languages")
 data class Language(
-    @Id
+        @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id : Int?,
-    val name: String,
-    val discipline: String,
-    val difficulty: Int
+        var name: String,
+        var discipline: String,
+        var difficulty: Int
 )
