@@ -1,5 +1,6 @@
 package com.kotlin.spring.kotlin_spring.utils
 
+import com.kotlin.spring.kotlin_spring.dto.LanguageDTO
 import com.kotlin.spring.kotlin_spring.entity.Language
 
     fun mockLanguageList() = listOf<Language>(
@@ -9,3 +10,12 @@ import com.kotlin.spring.kotlin_spring.entity.Language
             Language(null, "JavaScript", "frontend", 3),
             Language(null, "Kotlin", "backend", 3)
     )
+
+    fun languageDTO(
+        id: Int? = null,
+        name: String = "Python",
+        discipline: String = "backend",
+        difficulty: Int = 4
+        ) = LanguageDTO(
+        id, name, discipline, difficulty
+        )

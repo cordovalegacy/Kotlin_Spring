@@ -50,4 +50,16 @@ class LanguageService(val languageRepository: LanguageRepository) {
             throw LanguageNotFoundException("Language $languageId does not exist")
         }
     }
+
+    fun deleteLanguage(languageId: Int){
+        val existingLanguage = languageRepository.findById(languageId)
+        if(existingLanguage.isPresent){
+            existingLanguage.get()
+                .let {
+                    languageRepository.deleteById(languageId)
+                }
+        } else {
+            throw LanguageNotFoundException("No language found for languageId $languageId")
+        }
+    }
 }

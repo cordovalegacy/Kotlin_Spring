@@ -3,6 +3,7 @@ package com.kotlin.spring.kotlin_spring.controller
 import com.kotlin.spring.kotlin_spring.dto.LanguageDTO
 import com.kotlin.spring.kotlin_spring.service.LanguageService
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -34,5 +35,11 @@ class LanguageController(val languageService: LanguageService) {
     @ResponseStatus(HttpStatus.CREATED)
     fun updateLanguage(@RequestBody languageDTO: LanguageDTO, @PathVariable languageId : Int){
         languageService.updateLanguage(languageId, languageDTO)
+    }
+
+    @DeleteMapping("/{languageId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteLanguage(@PathVariable("languageId") languageId: Int){
+        return languageService.deleteLanguage(languageId)
     }
 }

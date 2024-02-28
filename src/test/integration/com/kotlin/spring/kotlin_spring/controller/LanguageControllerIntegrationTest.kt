@@ -1,21 +1,27 @@
 package com.kotlin.spring.kotlin_spring.controller
 
+import com.kotlin.spring.kotlin_spring.KotlinSpringApplication
 import com.kotlin.spring.kotlin_spring.dto.LanguageDTO
 import com.kotlin.spring.kotlin_spring.entity.Language
 import com.kotlin.spring.kotlin_spring.repository.LanguageRepository
 import com.kotlin.spring.kotlin_spring.utils.mockLanguageList
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.expectBody
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureWebTestClient
+@ContextConfiguration(classes = [KotlinSpringApplication::class])
 class LanguageControllerIntegrationTest {
 
     //this will connect us automatically from the spring boot application to the test client
@@ -71,6 +77,23 @@ class LanguageControllerIntegrationTest {
     }
 
     @Test
+    fun deleteLanguage(){
+        val language = Language(null, "JavaScript", "frontend", 3)
+        languageRepository.save(language)
+
+        val deletedLanguageDto = webTestClient
+            .delete()
+            .uri("/v1/languages/{languageId}", language.id)
+            .exchange()
+            .expectStatus().isNoContent
+            .expectBody(Void::class.java)
+            .returnResult()
+
+        assertEquals(HttpStatus.NO_CONTENT, deletedLanguageDto.status)
+    }
+
+    //not working
+    @Test
     fun updateLanguage(){
         val testLanguage = Language(null, "Python", "backend", 2)
         languageRepository.save(testLanguage)
@@ -87,6 +110,6 @@ class LanguageControllerIntegrationTest {
                 .returnResult()
                 .responseBody
 
-        Assertions.assertEquals(updateLanguageRequestBody.name, updatedLanguageDTO!!.name)
+        assertEquals(updateLanguageRequestBody.name, updatedLanguageDTO!!.name)
     }
 }
